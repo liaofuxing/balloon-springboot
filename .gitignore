@@ -1,4 +1,5 @@
 /target/
+*/target/
 /logs/
 !.mvn/wrapper/maven-wrapper.jar
 
@@ -25,4 +26,3 @@
 /dist/
 /nbdist/
 /.nb-gradle/
-/system-server/target/
