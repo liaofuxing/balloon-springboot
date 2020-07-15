@@ -2,6 +2,7 @@ package com.balloon.springboot.autoconfigure.security;
 
 import com.balloon.springboot.autoconfigure.AutoConfigConstant;
 import com.balloon.springboot.autoconfigure.redis.RedisUtilsAutoConfiguration;
+import com.balloon.springboot.mail.service.impl.MailServiceImpl;
 import com.balloon.springboot.redis.utils.RedisUtils;
 import com.balloon.springboot.security.config.UsernameAuthenticationConfigurer;
 import com.balloon.springboot.security.config.SmsCodeAuthenticationConfigurer;
@@ -17,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -24,6 +26,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -49,11 +52,22 @@ public class SecurityExtAutoConfiguration {
     private static final Logger logger = LoggerFactory.getLogger(RedisUtilsAutoConfiguration.class);
 
 
+    @Autowired
+    private UserSmsDetailsService  userSmsDetailsService;
+
+    @Autowired
+    private UserDetailsExtService userDetailsExtService;
+
+    @Autowired
+    private RedisUtils redisUtils;
+
     @Configuration
     @ConditionalOnClass(WebSecurityConfigurerAdapter.class)
     @EnableWebSecurity
     class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-
+        /**
+         * 用户名密码登录配置器
+         */
         @Autowired
         private UsernameAuthenticationConfigurer usernameAuthenticationConfigurer;
 
@@ -63,16 +77,14 @@ public class SecurityExtAutoConfiguration {
         @Autowired
         private SmsCodeAuthenticationConfigurer smsCodeAuthenticationConfigurer;
 
+        /**
+         * 注销登录 handler
+         */
         @Autowired
-        private RedisUtils redisUtils;
-
+        private TokenLogoutSuccessHandler tokenLogoutSuccessHandler;
 
         @Override
         protected void configure(HttpSecurity http) throws Exception {
-            smsCodeAuthenticationConfigurer.setRedisUtils(redisUtils);
-            usernameAuthenticationConfigurer.setRedisUtils(redisUtils);
-            TokenLogoutSuccessHandler tokenLogoutSuccessHandler = new TokenLogoutSuccessHandler();
-            tokenLogoutSuccessHandler.setRedisUtils(redisUtils);
             //处理跨域请求
             http
                     .cors().and().csrf().disable()
@@ -101,14 +113,6 @@ public class SecurityExtAutoConfiguration {
 
     }
 
-    //密码加密器，在授权时，框架为我们解析用户名密码时，密码会通过加密器加密在进行比较
-    //将密码加密器交给spring管理，在注册时，密码也是需要加密的，再存入数据库中
-    //用户输入登录的密码用加密器加密，再与数据库中查询到的用户密码比较
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
     /**
      * 提供一个默认的 UserDetailsExtService
      *
@@ -131,12 +135,46 @@ public class SecurityExtAutoConfiguration {
         return new DefaultUserSmsDetailsServiceImpl();
     }
 
+    @Bean
+    public TokenLogoutSuccessHandler tokenLogoutSuccessHandler() {
+        TokenLogoutSuccessHandler tokenLogoutSuccessHandler = new TokenLogoutSuccessHandler();
+        tokenLogoutSuccessHandler.setRedisUtils(redisUtils);
+        return tokenLogoutSuccessHandler;
+    }
+
+    @Bean
+    @ConditionalOnBean(UserDetailsExtService.class)
+    public UsernameAuthenticationConfigurer UsernameAuthenticationConfigurer() {
+        UsernameAuthenticationConfigurer usernameAuthenticationConfigurer = new UsernameAuthenticationConfigurer();
+        usernameAuthenticationConfigurer.setRedisUtils(redisUtils);
+        usernameAuthenticationConfigurer.setUserDetailsExtServiceImpl(userDetailsExtService);
+        return usernameAuthenticationConfigurer;
+    }
+
+    @Bean
+    @ConditionalOnBean(UserSmsDetailsService.class)
+    public SmsCodeAuthenticationConfigurer SmsCodeAuthenticationConfigurer() {
+        SmsCodeAuthenticationConfigurer smsCodeAuthenticationConfigurer = new SmsCodeAuthenticationConfigurer();
+        smsCodeAuthenticationConfigurer.setDefaultUserDetailsServiceImpl(userSmsDetailsService);
+        smsCodeAuthenticationConfigurer.setRedisUtils(redisUtils);
+        return smsCodeAuthenticationConfigurer;
+    }
+
+    //密码加密器，在授权时，框架为我们解析用户名密码时，密码会通过加密器加密在进行比较
+    //将密码加密器交给spring管理，在注册时，密码也是需要加密的，再存入数据库中
+    //用户输入登录的密码用加密器加密，再与数据库中查询到的用户密码比较
+    @Bean
+    public BCryptPasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+
     /**
      * 自动装载添加拦截器
      */
     @PostConstruct
     public void init() {
-        logger.info("securityExtAutoConfiguration 已被自动装载");
+        logger.info("SecurityExtAutoConfiguration 已被自动装载");
     }
 
 }

@@ -59,7 +59,7 @@ public class MailAutoConfiguration {
      */
     @PostConstruct
     public void init() {
-        logger.info("mailAutoConfiguration 已被自动装载");
+        logger.info("MailAutoConfiguration 已被自动装载");
     }
 
 }

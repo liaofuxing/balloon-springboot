@@ -29,8 +29,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * @author liaofuxing
  * @date 2020/02/18 11:50
  */
-@SuppressWarnings("all")
-@Configuration
 public class UsernameAuthenticationConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
 //    @Autowired
@@ -39,7 +37,7 @@ public class UsernameAuthenticationConfigurer extends SecurityConfigurerAdapter<
 //    @Autowired
 //    private AuthenticationFailureHandler defaultAuthenticationFailureHandler;
 
-    @Autowired
+    @Setter
     private UserDetailsExtService userDetailsExtServiceImpl;
 
     @Setter
@@ -68,15 +66,4 @@ public class UsernameAuthenticationConfigurer extends SecurityConfigurerAdapter<
 
     }
 
-    /**
-     * 提供一个默认的 UserDetailsExtService
-     *
-     * @return 返回 UserDetailsExtService
-     */
-    @Bean
-    @ConditionalOnClass(UsernameAuthenticationConfigurer.class)
-    @ConditionalOnMissingBean(UserDetailsExtService.class)
-    public UserDetailsExtService userDetailsExtService() {
-        return new DefaultUserDetailsServiceImpl();
-    }
 }

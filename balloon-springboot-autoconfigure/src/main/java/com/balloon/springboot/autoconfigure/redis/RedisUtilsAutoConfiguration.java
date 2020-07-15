@@ -79,7 +79,7 @@ public class RedisUtilsAutoConfiguration {
      */
     @PostConstruct
     public void init() {
-        logger.info("redisUtilsAutoConfiguration 已被自动装载");
+        logger.info("RedisUtilsAutoConfiguration 已被自动装载");
     }
 
 }

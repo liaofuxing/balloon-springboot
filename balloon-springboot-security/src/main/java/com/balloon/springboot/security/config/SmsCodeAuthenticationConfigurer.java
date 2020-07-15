@@ -30,8 +30,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * @author liaofuxing
  * @date 2020/02/28 20:13
  */
-@SuppressWarnings("all")
-@Configuration
 public class SmsCodeAuthenticationConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
 //    @Autowired
@@ -40,7 +38,7 @@ public class SmsCodeAuthenticationConfigurer extends SecurityConfigurerAdapter<D
 //    @Autowired
 //    private SmsLoginAuthenticationFailureHandler smsLoginAuthenticationFailureHandler;
 
-    @Autowired
+    @Setter
     private UserSmsDetailsService defaultUserDetailsServiceImpl;
 
     @Setter
@@ -66,17 +64,5 @@ public class SmsCodeAuthenticationConfigurer extends SecurityConfigurerAdapter<D
         http.authenticationProvider(userSmsAuthenticationProvider)
                 .addFilterAfter(smsCodeAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
-    }
-
-    /**
-     * 提供一个默认的 UserSmsDetailsService
-     *
-     * @return 返回 UserSmsDetailsService
-     */
-    @Bean
-    @ConditionalOnClass(SmsCodeAuthenticationConfigurer.class)
-    @ConditionalOnMissingBean(UserSmsDetailsService.class)
-    public UserSmsDetailsService UserSmsDetailsService() {
-        return new DefaultUserSmsDetailsServiceImpl();
     }
 }
