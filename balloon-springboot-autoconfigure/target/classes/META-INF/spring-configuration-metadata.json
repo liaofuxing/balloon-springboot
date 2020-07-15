@@ -1,0 +1,77 @@
+{
+  "groups": [
+    {
+      "name": "balloon.mail",
+      "type": "com.balloon.springboot.autoconfigure.mail.MailAutoProperties",
+      "sourceType": "com.balloon.springboot.autoconfigure.mail.MailAutoProperties"
+    },
+    {
+      "name": "balloon.redis",
+      "type": "com.balloon.springboot.autoconfigure.redis.RedisAutoProperties",
+      "sourceType": "com.balloon.springboot.autoconfigure.redis.RedisAutoProperties"
+    },
+    {
+      "name": "balloon.security",
+      "type": "com.balloon.springboot.autoconfigure.security.SecurityExtAutoProperties",
+      "sourceType": "com.balloon.springboot.autoconfigure.security.SecurityExtAutoProperties"
+    },
+    {
+      "name": "balloon.sms",
+      "type": "com.balloon.springboot.autoconfigure.sms.SmsAutoProperties",
+      "sourceType": "com.balloon.springboot.autoconfigure.sms.SmsAutoProperties"
+    },
+    {
+      "name": "balloon.springboot",
+      "type": "com.balloon.springboot.autoconfigure.SpringBootExtProperties",
+      "sourceType": "com.balloon.springboot.autoconfigure.SpringBootExtProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "balloon.mail.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.balloon.springboot.autoconfigure.mail.MailAutoProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "balloon.mail.from",
+      "type": "java.lang.String",
+      "sourceType": "com.balloon.springboot.autoconfigure.mail.MailAutoProperties"
+    },
+    {
+      "name": "balloon.mail.subject",
+      "type": "java.lang.String",
+      "sourceType": "com.balloon.springboot.autoconfigure.mail.MailAutoProperties"
+    },
+    {
+      "name": "balloon.mail.to",
+      "type": "java.lang.String",
+      "sourceType": "com.balloon.springboot.autoconfigure.mail.MailAutoProperties"
+    },
+    {
+      "name": "balloon.redis.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.balloon.springboot.autoconfigure.redis.RedisAutoProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "balloon.security.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.balloon.springboot.autoconfigure.security.SecurityExtAutoProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "balloon.sms.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.balloon.springboot.autoconfigure.sms.SmsAutoProperties",
+      "defaultValue": false
+    },
+    {
+      "name": "balloon.springboot.enabled",
+      "type": "java.lang.Boolean",
+      "sourceType": "com.balloon.springboot.autoconfigure.SpringBootExtProperties",
+      "defaultValue": false
+    }
+  ],
+  "hints": []
+}
