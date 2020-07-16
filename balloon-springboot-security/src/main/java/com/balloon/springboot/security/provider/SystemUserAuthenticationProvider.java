@@ -1,6 +1,6 @@
 package com.balloon.springboot.security.provider;
 
-import com.balloon.springboot.security.comm.AuthenticationChecks;
+import com.balloon.springboot.security.common.AuthenticationChecks;
 import com.balloon.springboot.security.service.UserDetailsExtService;
 import lombok.Setter;
 import org.apache.commons.logging.Log;

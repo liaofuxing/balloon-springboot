@@ -1,10 +1,9 @@
-package com.balloon.springboot.security.comm;
+package com.balloon.springboot.security.common;
 
 import com.balloon.springboot.redis.utils.RedisUtils;
 import com.balloon.springboot.security.provider.SmsCodeAuthenticationToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
@@ -28,7 +27,7 @@ public class AuthenticationChecks {
      * @param userDetails     用户信息
      * @param authentication  MallUserAuthenticationToken
      * @param passwordEncoder 密码加密规则
-     * @throws AuthenticationException
+     * @throws AuthenticationException 校验异常
      */
     public static void additionalAuthenticationChecks(UserDetails userDetails,
                                                       AbstractAuthenticationToken authentication,

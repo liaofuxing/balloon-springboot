@@ -1,11 +1,9 @@
 package com.balloon.springboot.security.provider;
 
 import com.balloon.springboot.redis.utils.RedisUtils;
-import com.balloon.springboot.security.comm.AuthenticationChecks;
+import com.balloon.springboot.security.common.AuthenticationChecks;
 import com.balloon.springboot.security.service.UserSmsDetailsService;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;

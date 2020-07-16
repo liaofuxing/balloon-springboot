@@ -7,20 +7,11 @@ import com.balloon.springboot.security.provider.UserSmsAuthenticationProvider;
 import com.balloon.springboot.security.securityhandler.DefaultAuthenticationSuccessHandler;
 import com.balloon.springboot.security.securityhandler.SmsLoginAuthenticationFailureHandler;
 import com.balloon.springboot.security.service.UserSmsDetailsService;
-import com.balloon.springboot.security.service.impl.DefaultUserSmsDetailsServiceImpl;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.DefaultSecurityFilterChain;
-import org.springframework.security.web.authentication.AuthenticationFailureHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 
