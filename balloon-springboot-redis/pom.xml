@@ -17,21 +17,17 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.8</version>
-        </dependency>
 
         <dependency>
             <groupId>com.balloon</groupId>
             <artifactId>balloon-core</artifactId>
-            <version>1.0.0</version>
+            <version>${balloon.core.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.balloon</groupId>
             <artifactId>balloon-springboot-core</artifactId>
-            <version>0.0.1</version>
+            <version>${project.version}</version>
         </dependency>
 
     </dependencies>

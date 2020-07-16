@@ -20,25 +20,24 @@
         <dependency>
             <groupId>com.balloon</groupId>
             <artifactId>balloon-springboot-core</artifactId>
-            <version>0.0.1</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.balloon</groupId>
             <artifactId>balloon-springboot-redis</artifactId>
-            <version>0.0.1</version>
+            <version>${project.version}</version>
         </dependency>
+
         <dependency>
             <groupId>com.balloon</groupId>
             <artifactId>balloon-springboot-security</artifactId>
-            <version>0.0.1</version>
-            <scope>compile</scope>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.balloon</groupId>
             <artifactId>balloon-springboot-mail</artifactId>
-            <version>0.0.1</version>
-            <scope>compile</scope>
+            <version>${project.version}</version>
         </dependency>
 
     </dependencies>
