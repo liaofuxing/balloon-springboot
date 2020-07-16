@@ -1,4 +1,4 @@
-package com.balloon.springboot.security.securityhandler;
+package com.balloon.springboot.security.handler;
 
 
 import com.balloon.springboot.core.jackson.JacksonObjectMapper;

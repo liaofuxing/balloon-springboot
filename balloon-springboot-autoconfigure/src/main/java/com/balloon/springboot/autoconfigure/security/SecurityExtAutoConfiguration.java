@@ -2,14 +2,13 @@ package com.balloon.springboot.autoconfigure.security;
 
 import com.balloon.springboot.autoconfigure.AutoConfigConstant;
 import com.balloon.springboot.autoconfigure.redis.RedisUtilsAutoConfiguration;
-import com.balloon.springboot.mail.service.impl.MailServiceImpl;
 import com.balloon.springboot.redis.utils.RedisUtils;
 import com.balloon.springboot.security.config.UsernameAuthenticationConfigurer;
 import com.balloon.springboot.security.config.SmsCodeAuthenticationConfigurer;
 import com.balloon.springboot.security.filter.TokenAuthorizationFilter;
-import com.balloon.springboot.security.securityhandler.TokenAccessDeniedHandler;
-import com.balloon.springboot.security.securityhandler.TokenAuthenticationEntryPointHandler;
-import com.balloon.springboot.security.securityhandler.TokenLogoutSuccessHandler;
+import com.balloon.springboot.security.handler.TokenAccessDeniedHandler;
+import com.balloon.springboot.security.handler.TokenAuthenticationEntryPointHandler;
+import com.balloon.springboot.security.handler.TokenLogoutSuccessHandler;
 import com.balloon.springboot.security.service.UserDetailsExtService;
 import com.balloon.springboot.security.service.UserSmsDetailsService;
 import com.balloon.springboot.security.service.impl.DefaultUserDetailsServiceImpl;
@@ -26,7 +25,6 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;

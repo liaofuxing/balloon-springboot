@@ -11,7 +11,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 
 /**
- * 短信验证码登录验证器
+ * 短信验证码登录验证 Provider
  *
  * @author liaofuxing
  * @date 2020/04/24 01:50
@@ -46,8 +46,8 @@ public class UserSmsAuthenticationProvider implements AuthenticationProvider {
 
     /**
      * 只有Authentication为SmsCodeAuthenticationToken使用此Provider认证
-     * @param authentication
-     * @return
+     * @param authentication authentication
+     * @return boolean
      */
     @Override
     public boolean supports(Class<?> authentication) {

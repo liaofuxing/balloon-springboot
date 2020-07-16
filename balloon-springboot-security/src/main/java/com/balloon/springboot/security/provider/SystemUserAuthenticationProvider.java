@@ -13,7 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
- * 运营平台登录 Provider
+ * 用户名密码登录校验 Provider
  *
  * @author liaofuxing
  * @date 2020/04/24 01:50
@@ -47,7 +47,7 @@ public class SystemUserAuthenticationProvider implements AuthenticationProvider 
 
 
     /**
-     * 只有 Authentication 为 MallUserAuthenticationToken 使用此 Provider 认证
+     * 只有 Authentication 为 UsernamePasswordAuthenticationToken 使用此 Provider 认证
      * @param authentication Provider
      *
      * @return boolean
