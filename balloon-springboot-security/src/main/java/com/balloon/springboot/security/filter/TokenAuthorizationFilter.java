@@ -3,13 +3,11 @@ package com.balloon.springboot.security.filter;
 import com.balloon.springboot.core.jackson.JacksonObjectMapper;
 import com.balloon.springboot.redis.utils.RedisUtils;
 import com.balloon.springboot.security.entity.SecurityUser;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import lombok.Setter;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -21,13 +19,11 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-@Component
+
 public class TokenAuthorizationFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private StringRedisTemplate redisTemplate;
-
-    private final RedisUtils redisUtils = new RedisUtils(redisTemplate);
+    @Setter
+    public RedisUtils redisUtils;
 
     private final JacksonObjectMapper mapper = new JacksonObjectMapper();
 
@@ -35,7 +31,7 @@ public class TokenAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain chain) throws IOException, ServletException {
         //从请求头中取出token
         String token = request.getHeader("token");
-        UsernamePasswordAuthenticationToken authentication;
+
         if (!StringUtils.isEmpty(token)) {
             //用token从redis中获取用户信息，构造一个SecurityUser
 
@@ -47,18 +43,12 @@ public class TokenAuthorizationFilter extends OncePerRequestFilter {
                 redisUtils.expire("SYSTEM_SECURITY_TOKEN:" + token, 30, TimeUnit.MINUTES);
                 redisUtils.expire("SYSTEM_USER_INFO:" + userMap.get("username"), 30, TimeUnit.MINUTES);
                 // 设置一个已认证的 authentication
-                authentication = new UsernamePasswordAuthenticationToken(securityUser,
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(securityUser,
                         null, securityUser.getAuthorities());
                 authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            } else {
-                //redis 中不存在用户信息将授权信息设置为空
-                authentication = null;
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
-        } else {
-            // 请求头中不包含token
-            authentication = null;
         }
-        SecurityContextHolder.getContext().setAuthentication(authentication);
         chain.doFilter(request, response);
     }
 }

@@ -4,6 +4,8 @@ import com.balloon.springboot.redis.utils.RedisUtils;
 import com.balloon.springboot.security.common.AuthenticationChecks;
 import com.balloon.springboot.security.service.UserSmsDetailsService;
 import lombok.Setter;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
@@ -18,6 +20,8 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 public class UserSmsAuthenticationProvider implements AuthenticationProvider {
 
+    private final Log logger = LogFactory.getLog(getClass());
+
     @Setter
     private UserSmsDetailsService userSmsDetailsService;
 
@@ -26,7 +30,8 @@ public class UserSmsAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        SmsCodeAuthenticationToken authenticationToken = (SmsCodeAuthenticationToken) authentication;
+        logger.info("正在认证登录用户...");
+        UserSmsAuthenticationToken authenticationToken = (UserSmsAuthenticationToken) authentication;
         //调用自定义的userDetailsService认证
         UserDetails user = userSmsDetailsService.loadUserByPhone((String) authenticationToken.getPrincipal());
 
@@ -38,7 +43,7 @@ public class UserSmsAuthenticationProvider implements AuthenticationProvider {
         AuthenticationChecks.smsCodeAuthenticationChecks(authenticationToken, redisUtils);
 
         //如果user不为空重新构建SmsCodeAuthenticationToken（已认证）
-        SmsCodeAuthenticationToken authenticationResult = new SmsCodeAuthenticationToken(user, user.getAuthorities());
+        UserSmsAuthenticationToken authenticationResult = new UserSmsAuthenticationToken(user, user.getAuthorities());
         authenticationResult.setDetails(authenticationToken.getDetails());
         return authenticationResult;
 
@@ -51,7 +56,7 @@ public class UserSmsAuthenticationProvider implements AuthenticationProvider {
      */
     @Override
     public boolean supports(Class<?> authentication) {
-        return SmsCodeAuthenticationToken.class.isAssignableFrom(authentication);
+        return UserSmsAuthenticationToken.class.isAssignableFrom(authentication);
     }
 
 }

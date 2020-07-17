@@ -1,7 +1,7 @@
 package com.balloon.springboot.security.common;
 
 import com.balloon.springboot.redis.utils.RedisUtils;
-import com.balloon.springboot.security.provider.SmsCodeAuthenticationToken;
+import com.balloon.springboot.security.provider.UserSmsAuthenticationToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -52,13 +52,13 @@ public class AuthenticationChecks {
      * 短信验证码校验方法
      *
      * @param authentication  MallUserAuthenticationToken
-     * @param redisTemplate  rides 操作工具
+     * @param redisUtils  rides 操作工具
      * @throws AuthenticationException 校验失败异常
      */
-    public static void smsCodeAuthenticationChecks(SmsCodeAuthenticationToken authentication,
-                                                   RedisUtils redisTemplate) throws AuthenticationException {
+    public static void smsCodeAuthenticationChecks(UserSmsAuthenticationToken authentication,
+                                                   RedisUtils redisUtils) throws AuthenticationException {
         // 应该在这里处理登录逻辑
-        String smsCode = redisTemplate.get("SMS_CODE:"+ authentication.getPrincipal());
+        String smsCode = redisUtils.get("SMS_CODE:"+ authentication.getPrincipal());
         if (smsCode == null || !smsCode.equals(authentication.getSmsCode())) {
             LOGGER.debug("Authentication failed: smsCode error");
 

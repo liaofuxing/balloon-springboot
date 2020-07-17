@@ -5,7 +5,12 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.util.Collection;
 
-public class  SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
+/**
+ * 短信登录用户验证适配器
+ *
+ * @author liaofuxing
+ */
+public class UserSmsAuthenticationToken extends AbstractAuthenticationToken {
     private static final long serialVersionUID = 2383092775910246006L;
 
     /**
@@ -20,10 +25,11 @@ public class  SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
 
     /**
      * SmsCodeAuthenticationFilter中构建的未认证的Authentication
-     * @param phone 手机号
+     *
+     * @param phone   手机号
      * @param smsCode 验证码
      */
-    public SmsCodeAuthenticationToken(String phone, String smsCode) {
+    public UserSmsAuthenticationToken(String phone, String smsCode) {
         super(null);
         this.principal = phone;
         this.smsCode = smsCode;
@@ -32,10 +38,11 @@ public class  SmsCodeAuthenticationToken extends AbstractAuthenticationToken {
 
     /**
      * SmsCodeAuthenticationProvider中构建已认证的Authentication
+     *
      * @param principal
      * @param authorities
      */
-    public SmsCodeAuthenticationToken(Object principal,
+    public UserSmsAuthenticationToken(Object principal,
                                       Collection<? extends GrantedAuthority> authorities) {
         super(authorities);
         this.principal = principal;

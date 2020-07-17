@@ -18,19 +18,21 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  * @author liaofuxing
  * @date 2020/04/24 01:50
  */
-public class SystemUserAuthenticationProvider implements AuthenticationProvider {
+public class UserAuthenticationProvider implements AuthenticationProvider {
 
-    protected final Log logger = LogFactory.getLog(getClass());
+    private final Log logger = LogFactory.getLog(getClass());
 
     @Setter
     private UserDetailsExtService systemUserDetailsService;
 
+    @Setter
     private PasswordEncoder passwordEncoder;
 
 
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+        logger.info("正在认证登录用户...");
         UsernamePasswordAuthenticationToken authenticationToken = (UsernamePasswordAuthenticationToken) authentication;
         String username = (String) authenticationToken.getPrincipal();
         //调用自定义的userDetailsService认证
@@ -55,14 +57,6 @@ public class SystemUserAuthenticationProvider implements AuthenticationProvider 
     @Override
     public boolean supports(Class<?> authentication) {
         return UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication);
-    }
-
-    public PasswordEncoder getPasswordEncoder() {
-        return passwordEncoder;
-    }
-
-    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
     }
 
 }

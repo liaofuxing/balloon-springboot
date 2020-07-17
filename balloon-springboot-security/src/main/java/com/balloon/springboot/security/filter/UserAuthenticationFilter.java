@@ -1,8 +1,9 @@
 package com.balloon.springboot.security.filter;
 
+import com.balloon.core.utils.StringUtils;
 import com.balloon.springboot.core.jackson.JacksonObjectMapper;
-import com.balloon.springboot.security.provider.SmsCodeAuthenticationToken;
 import org.springframework.security.authentication.AuthenticationServiceException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -19,15 +20,15 @@ import java.io.InputStreamReader;
 import java.util.Map;
 
 /**
- * 短信验证码登录过滤器
+ * 用户名密码登录过滤器
  *
  * @author liaofuxing
- * @date 2020/02/28 20:21
+ * @date 2020/02/18 11:50
  */
-public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
+public class UserAuthenticationFilter extends AbstractAuthenticationProcessingFilter {
 
-    public SmsCodeAuthenticationFilter() {
-        super(new AntPathRequestMatcher("/user/phoneLogin", "POST"));
+    public UserAuthenticationFilter() {
+        super(new AntPathRequestMatcher("/user/login", "POST"));
     }
 
     @Override
@@ -50,21 +51,17 @@ public class SmsCodeAuthenticationFilter extends AbstractAuthenticationProcessin
         }
 
 
-        JacksonObjectMapper mapper = new JacksonObjectMapper();
-        Map<String, String> map = mapper.readValue(sb.toString(), Map.class);
-        String phone = map.get("phone");
-        String smsCode = map.get("smsCode");
+        if (StringUtils.isNotEmpty(sb)) {
+            JacksonObjectMapper mapper = new JacksonObjectMapper();
+            Map<String, String> map = mapper.readValue(sb.toString(), Map.class);
+            String username = map.get("username");
+            String password = String.valueOf(map.get("password"));
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(username, password);
 
-
-        //创建SmsCodeAuthenticationToken(未认证)
-        SmsCodeAuthenticationToken authenticationToken = new SmsCodeAuthenticationToken(phone, smsCode);
-        //设置用户信息
-        setDetails(request, authenticationToken);
-        return this.getAuthenticationManager().authenticate(authenticationToken);
-    }
-
-    protected void setDetails(HttpServletRequest request, SmsCodeAuthenticationToken authRequest) {
-        authRequest.setDetails(authenticationDetailsSource.buildDetails(request));
+            return this.getAuthenticationManager().authenticate(authenticationToken);
+        } else {
+            throw new RuntimeException("获取请求内容异常");
+        }
     }
 
 }

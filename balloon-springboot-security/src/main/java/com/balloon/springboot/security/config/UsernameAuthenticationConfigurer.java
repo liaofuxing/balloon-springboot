@@ -1,8 +1,8 @@
 package com.balloon.springboot.security.config;
 
 import com.balloon.springboot.redis.utils.RedisUtils;
-import com.balloon.springboot.security.filter.JsonAuthenticationFilter;
-import com.balloon.springboot.security.provider.SystemUserAuthenticationProvider;
+import com.balloon.springboot.security.filter.UserAuthenticationFilter;
+import com.balloon.springboot.security.provider.UserAuthenticationProvider;
 import com.balloon.springboot.security.handler.DefaultAuthenticationFailureHandler;
 import com.balloon.springboot.security.handler.DefaultAuthenticationSuccessHandler;
 import com.balloon.springboot.security.service.UserDetailsExtService;
@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 
 /**
- * Json 用户名密码登录配置文件(配置器)
+ * 用户名密码登录配置文件(配置器)
  *
  * @author liaofuxing
  * @date 2020/02/18 11:50
@@ -39,17 +39,17 @@ public class UsernameAuthenticationConfigurer extends SecurityConfigurerAdapter<
         DefaultAuthenticationFailureHandler defaultAuthenticationFailureHandler = new DefaultAuthenticationFailureHandler();
 
         // 自定义过滤器
-        JsonAuthenticationFilter jsonAuthenticationFilter = new JsonAuthenticationFilter();
-        jsonAuthenticationFilter.setAuthenticationManager(http.getSharedObject(AuthenticationManager.class));
-        jsonAuthenticationFilter.setAuthenticationSuccessHandler(defaultAuthenticationSuccessHandler);
-        jsonAuthenticationFilter.setAuthenticationFailureHandler(defaultAuthenticationFailureHandler);
+        UserAuthenticationFilter userAuthenticationFilter = new UserAuthenticationFilter();
+        userAuthenticationFilter.setAuthenticationManager(http.getSharedObject(AuthenticationManager.class));
+        userAuthenticationFilter.setAuthenticationSuccessHandler(defaultAuthenticationSuccessHandler);
+        userAuthenticationFilter.setAuthenticationFailureHandler(defaultAuthenticationFailureHandler);
 
         // 自定义systemUserAuthenticationProvider， 并为Provider 设置 systemUserDetailsService
-        SystemUserAuthenticationProvider systemUserAuthenticationProvider = new SystemUserAuthenticationProvider();
-        systemUserAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
-        systemUserAuthenticationProvider.setSystemUserDetailsService(userDetailsExtServiceImpl);
-        http.authenticationProvider(systemUserAuthenticationProvider)
-            .addFilterAfter(jsonAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        UserAuthenticationProvider userAuthenticationProvider = new UserAuthenticationProvider();
+        userAuthenticationProvider.setPasswordEncoder(new BCryptPasswordEncoder());
+        userAuthenticationProvider.setSystemUserDetailsService(userDetailsExtServiceImpl);
+        http.authenticationProvider(userAuthenticationProvider)
+            .addFilterAfter(userAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
 

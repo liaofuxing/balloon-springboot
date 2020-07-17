@@ -16,6 +16,7 @@ public class TokenAccessDeniedHandler implements AccessDeniedHandler {
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException e) throws IOException , ServletException {
+
         int status = StatusCodeEnums.UNAUTHORIZED.getCode();
         JacksonObjectMapper mapper = new JacksonObjectMapper();
         response.setStatus(403);

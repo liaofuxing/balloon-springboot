@@ -9,6 +9,8 @@ import com.balloon.springboot.security.filter.TokenAuthorizationFilter;
 import com.balloon.springboot.security.handler.TokenAccessDeniedHandler;
 import com.balloon.springboot.security.handler.TokenAuthenticationEntryPointHandler;
 import com.balloon.springboot.security.handler.TokenLogoutSuccessHandler;
+import com.balloon.springboot.security.provider.UserAuthenticationProvider;
+import com.balloon.springboot.security.provider.UserSmsAuthenticationProvider;
 import com.balloon.springboot.security.service.UserDetailsExtService;
 import com.balloon.springboot.security.service.UserSmsDetailsService;
 import com.balloon.springboot.security.service.impl.DefaultUserDetailsServiceImpl;
@@ -25,11 +27,15 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.annotation.PostConstruct;
 
@@ -49,12 +55,12 @@ public class SecurityExtAutoConfiguration {
 
     private static final Logger logger = LoggerFactory.getLogger(RedisUtilsAutoConfiguration.class);
 
+    @Autowired
+    private UserDetailsExtService userDetailsExtService;
 
     @Autowired
     private UserSmsDetailsService  userSmsDetailsService;
 
-    @Autowired
-    private UserDetailsExtService userDetailsExtService;
 
     @Autowired
     private RedisUtils redisUtils;
@@ -81,32 +87,38 @@ public class SecurityExtAutoConfiguration {
         @Autowired
         private TokenLogoutSuccessHandler tokenLogoutSuccessHandler;
 
+        @Autowired
+        private TokenAuthorizationFilter tokenAuthorizationFilter;
+
+
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             //处理跨域请求
             http
                     .cors().and().csrf().disable()
+                    .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS) //Spring Security永远不会创建HttpSession，它不会使用HttpSession来获取SecurityContext
+                    .and()
                     .apply(usernameAuthenticationConfigurer)
                     .and()
                     .apply(smsCodeAuthenticationConfigurer)
-                    .and()
-                    //权限不足结果处理
-                    .exceptionHandling().authenticationEntryPoint(new TokenAuthenticationEntryPointHandler())
-                    .accessDeniedHandler(new TokenAccessDeniedHandler())
                     .and()
                     //设置登出url
                     .logout().logoutUrl("/user/logout")
                     //设置登出成功处理器（下面介绍）
                     .logoutSuccessHandler(tokenLogoutSuccessHandler).and()
                     .authorizeRequests()
-                    .antMatchers("/user/**").hasRole("ADMIN")
+                    .antMatchers("/sms/sendSmsCode").permitAll()
                     .anyRequest()
-                    .authenticated();
+                    .authenticated()
+                    .and()
+                    .headers().cacheControl();
 
             /*  authorizationFilter是用来拦截登录请求判断请求中是否带有token,并且token是否有对应的已经登录的用户,如果有应该直接授权通过
              *  所以这个过滤器应该在UsernamePasswordAuthenticationFilter过滤器之前执行,所以放在LogoutFilter之后
              */
-            http.addFilterAfter(new TokenAuthorizationFilter(), LogoutFilter.class);
+            http.addFilterBefore(tokenAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
+            //权限不足结果处理
+            http.exceptionHandling().authenticationEntryPoint(new TokenAuthenticationEntryPointHandler()).accessDeniedHandler(new TokenAccessDeniedHandler());
         }
 
     }
@@ -129,7 +141,7 @@ public class SecurityExtAutoConfiguration {
      */
     @Bean
     @ConditionalOnMissingBean(UserSmsDetailsService.class)
-    public UserSmsDetailsService UserSmsDetailsService() {
+    public UserSmsDetailsService userSmsDetailsService() {
         return new DefaultUserSmsDetailsServiceImpl();
     }
 
@@ -156,6 +168,14 @@ public class SecurityExtAutoConfiguration {
         smsCodeAuthenticationConfigurer.setDefaultUserDetailsServiceImpl(userSmsDetailsService);
         smsCodeAuthenticationConfigurer.setRedisUtils(redisUtils);
         return smsCodeAuthenticationConfigurer;
+    }
+
+
+    @Bean
+    public TokenAuthorizationFilter TokenAuthorizationFilter() {
+        TokenAuthorizationFilter tokenAuthorizationFilter = new TokenAuthorizationFilter();
+        tokenAuthorizationFilter.setRedisUtils(redisUtils);
+        return tokenAuthorizationFilter;
     }
 
     //密码加密器，在授权时，框架为我们解析用户名密码时，密码会通过加密器加密在进行比较

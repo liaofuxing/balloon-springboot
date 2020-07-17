@@ -2,7 +2,7 @@ package com.balloon.springboot.security.config;
 
 
 import com.balloon.springboot.redis.utils.RedisUtils;
-import com.balloon.springboot.security.filter.SmsCodeAuthenticationFilter;
+import com.balloon.springboot.security.filter.UserSmsAuthenticationFilter;
 import com.balloon.springboot.security.provider.UserSmsAuthenticationProvider;
 import com.balloon.springboot.security.handler.DefaultAuthenticationSuccessHandler;
 import com.balloon.springboot.security.handler.SmsLoginAuthenticationFailureHandler;
@@ -23,11 +23,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  */
 public class SmsCodeAuthenticationConfigurer extends SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 
-//    @Autowired
-//    private AuthenticationSuccessHandler defaultAuthenticationSuccessHandler;
-//
-//    @Autowired
-//    private SmsLoginAuthenticationFailureHandler smsLoginAuthenticationFailureHandler;
 
     @Setter
     private UserSmsDetailsService defaultUserDetailsServiceImpl;
@@ -43,17 +38,17 @@ public class SmsCodeAuthenticationConfigurer extends SecurityConfigurerAdapter<D
         SmsLoginAuthenticationFailureHandler smsLoginAuthenticationFailureHandler = new SmsLoginAuthenticationFailureHandler();
 
         // 自定义过滤器
-        SmsCodeAuthenticationFilter smsCodeAuthenticationFilter = new SmsCodeAuthenticationFilter();
-        smsCodeAuthenticationFilter.setAuthenticationManager(http.getSharedObject(AuthenticationManager.class));
-        smsCodeAuthenticationFilter.setAuthenticationSuccessHandler(defaultAuthenticationSuccessHandler);
-        smsCodeAuthenticationFilter.setAuthenticationFailureHandler(smsLoginAuthenticationFailureHandler);
+        UserSmsAuthenticationFilter userSmsAuthenticationFilter = new UserSmsAuthenticationFilter();
+        userSmsAuthenticationFilter.setAuthenticationManager(http.getSharedObject(AuthenticationManager.class));
+        userSmsAuthenticationFilter.setAuthenticationSuccessHandler(defaultAuthenticationSuccessHandler);
+        userSmsAuthenticationFilter.setAuthenticationFailureHandler(smsLoginAuthenticationFailureHandler);
 
         // 自定义userSmsAuthenticationProvider， 并为Provider 设置 userSmsDetailsService
         UserSmsAuthenticationProvider userSmsAuthenticationProvider = new UserSmsAuthenticationProvider();
         userSmsAuthenticationProvider.setUserSmsDetailsService(defaultUserDetailsServiceImpl);
         userSmsAuthenticationProvider.setRedisUtils(redisUtils);
         http.authenticationProvider(userSmsAuthenticationProvider)
-                .addFilterAfter(smsCodeAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterAfter(userSmsAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
     }
 }
