@@ -4,8 +4,8 @@ import com.balloon.springboot.redis.utils.RedisUtils;
 import com.balloon.springboot.security.common.AuthenticationChecks;
 import com.balloon.springboot.security.service.UserSmsDetailsService;
 import lombok.Setter;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.Authentication;
@@ -20,7 +20,7 @@ import org.springframework.security.core.userdetails.UserDetails;
  */
 public class UserSmsAuthenticationProvider implements AuthenticationProvider {
 
-    private final Log logger = LogFactory.getLog(getClass());
+    private static final Logger logger = LoggerFactory.getLogger(UserSmsAuthenticationProvider.class);
 
     @Setter
     private UserSmsDetailsService userSmsDetailsService;
@@ -33,6 +33,7 @@ public class UserSmsAuthenticationProvider implements AuthenticationProvider {
         logger.info("正在认证登录用户...");
         UserSmsAuthenticationToken authenticationToken = (UserSmsAuthenticationToken) authentication;
         //调用自定义的userDetailsService认证
+
         UserDetails user = userSmsDetailsService.loadUserByPhone((String) authenticationToken.getPrincipal());
 
         if (user == null) {

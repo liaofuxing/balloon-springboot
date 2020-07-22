@@ -3,8 +3,8 @@ package com.balloon.springboot.security.provider;
 import com.balloon.springboot.security.common.AuthenticationChecks;
 import com.balloon.springboot.security.service.UserDetailsExtService;
 import lombok.Setter;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,7 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  */
 public class UserAuthenticationProvider implements AuthenticationProvider {
 
-    private final Log logger = LogFactory.getLog(getClass());
+    private static final Logger logger = LoggerFactory.getLogger(UserAuthenticationProvider.class);
 
     @Setter
     private UserDetailsExtService systemUserDetailsService;

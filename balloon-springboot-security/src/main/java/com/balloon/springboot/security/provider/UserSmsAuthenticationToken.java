@@ -49,23 +49,7 @@ public class UserSmsAuthenticationToken extends AbstractAuthenticationToken {
         super.setAuthenticated(true); // must use super, as we override
     }
 
-    @Override
-    public Object getCredentials() {
-        return null;
-    }
 
-    @Override
-    public Object getPrincipal() {
-        return this.principal;
-    }
-
-    public String getSmsCode() {
-        return smsCode;
-    }
-
-    public void setSmsCode(String smsCode) {
-        this.smsCode = smsCode;
-    }
 
     /**
      * @param isAuthenticated
@@ -83,5 +67,23 @@ public class UserSmsAuthenticationToken extends AbstractAuthenticationToken {
     @Override
     public void eraseCredentials() {
         super.eraseCredentials();
+    }
+
+    @Override
+    public Object getCredentials() {
+        return null;
+    }
+
+    @Override
+    public Object getPrincipal() {
+        return this.principal;
+    }
+
+    public String getSmsCode() {
+        return smsCode;
+    }
+
+    public void setSmsCode(String smsCode) {
+        this.smsCode = smsCode;
     }
 }
