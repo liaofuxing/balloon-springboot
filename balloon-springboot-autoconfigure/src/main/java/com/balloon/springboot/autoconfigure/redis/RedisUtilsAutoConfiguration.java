@@ -2,8 +2,11 @@ package com.balloon.springboot.autoconfigure.redis;
 
 
 import com.balloon.springboot.autoconfigure.AutoConfigConstant;
+import com.balloon.springboot.core.jackson.JacksonObjectMapper;
 import com.balloon.springboot.redis.lock.DistributedLockHandler;
 import com.balloon.springboot.redis.utils.RedisUtils;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
 import io.lettuce.core.RedisClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +21,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
 import javax.annotation.PostConstruct;
@@ -44,7 +48,26 @@ public class RedisUtilsAutoConfiguration {
     public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
         lettuceConnectionFactory.setShareNativeConnection(false);
         RedisTemplate redisTemplate = new RedisTemplate<>();
+
+        // 使用 jackson 序列化工具
+        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
+
+        JacksonObjectMapper mapper = new JacksonObjectMapper();
+
+        mapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
+
+        mapper.enableDefaultTyping(JacksonObjectMapper.DefaultTyping.NON_FINAL);
+
+        jackson2JsonRedisSerializer.setObjectMapper(mapper);
+
         RedisSerializer<String> serializer = redisTemplate.getStringSerializer();
+        // key采用String的序列化方式
+        redisTemplate.setKeySerializer(serializer);
+        // hash的key也采用String的序列化方式
+        redisTemplate.setHashKeySerializer(serializer);
+        // value序列化方式采用jackson
+        redisTemplate.setValueSerializer(jackson2JsonRedisSerializer);
+
         redisTemplate.setDefaultSerializer(serializer);
         redisTemplate.setConnectionFactory(lettuceConnectionFactory);
         return redisTemplate;

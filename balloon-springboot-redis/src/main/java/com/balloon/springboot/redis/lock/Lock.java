@@ -5,8 +5,7 @@ import lombok.Data;
 /**
  * 锁
  *
- * @author mhuang
- * @since 1.0.0
+ * @author liaofuxing
  */
 @Data
 public class Lock {

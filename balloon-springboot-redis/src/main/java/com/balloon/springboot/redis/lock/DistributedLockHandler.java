@@ -16,15 +16,14 @@ import java.util.concurrent.TimeUnit;
 /**
  * 分布式锁
  *
- * @author mhuang
- * @since 1.0.0
+ * @author liaofuxing
  */
 public class DistributedLockHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(SpringContextHolder.class);
 
     /**
-     * 单个业务持有锁的时间30s，防止死锁
+     * 单个业务持有锁的时间30s, 防止死锁
      */
     private final static long LOCK_EXPIRE = 30 * 1000L;
     /**
