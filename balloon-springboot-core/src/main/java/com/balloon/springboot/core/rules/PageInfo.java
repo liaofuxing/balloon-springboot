@@ -1,7 +1,5 @@
 package com.balloon.springboot.core.rules;
 
-import lombok.Data;
-
 /**
  *
  * 分页实体类
@@ -11,8 +9,7 @@ import lombok.Data;
  * @author liaofuxing
  * @date 2020/03/13 22:03
  */
-@Data
-public class Page {
+public class PageInfo {
 
     /**
      * 当前页
@@ -24,4 +21,19 @@ public class Page {
      */
     private Integer pageSize;
 
+    public Integer getPage() {
+        return page;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
 }
