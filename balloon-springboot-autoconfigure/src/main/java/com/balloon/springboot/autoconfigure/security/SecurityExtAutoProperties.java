@@ -8,5 +8,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = AutoConfigConstant.SECURITY)
 public class SecurityExtAutoProperties {
 
+    /**
+     * 是否启用配置
+     */
     private boolean enabled;
+
+    /**
+     * 是否允许跨域
+     */
+    private boolean cors;
 }

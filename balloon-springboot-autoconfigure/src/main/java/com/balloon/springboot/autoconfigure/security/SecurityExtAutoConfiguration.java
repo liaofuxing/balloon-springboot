@@ -36,6 +36,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import javax.annotation.PostConstruct;
 
@@ -65,6 +68,28 @@ public class SecurityExtAutoConfiguration {
     @Autowired
     private RedisUtils redisUtils;
 
+
+    @Configuration
+    @ConditionalOnProperty(prefix = AutoConfigConstant.SECURITY, name = AutoConfigConstant.ENABLED_CORS, havingValue = AutoConfigConstant.TRUE)
+    public class WebMvcConfig extends WebMvcConfigurerAdapter {
+        @Override
+        public void addCorsMappings(CorsRegistry registry) {
+            registry.addMapping("/**")
+                    .allowedOrigins("*")
+                    .allowedMethods("POST", "GET", "PUT", "OPTIONS", "DELETE")
+                    .maxAge(3600)
+                    .allowCredentials(true);
+        }
+
+        /**
+         * 自动装载添加拦截器
+         */
+        @PostConstruct
+        public void init() {
+            logger.warn("警告: 允许跨域请求已开启, 要想关闭跨域配置, 请设置 balloon.security.cors = false, 关闭配置.");
+        }
+    }
+
     @Configuration
     @ConditionalOnClass(WebSecurityConfigurerAdapter.class)
     @EnableWebSecurity
@@ -89,6 +114,9 @@ public class SecurityExtAutoConfiguration {
 
         @Autowired
         private TokenAuthorizationFilter tokenAuthorizationFilter;
+
+
+
 
 
         @Override
