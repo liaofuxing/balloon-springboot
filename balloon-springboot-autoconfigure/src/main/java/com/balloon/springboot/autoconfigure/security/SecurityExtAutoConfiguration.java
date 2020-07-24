@@ -9,8 +9,6 @@ import com.balloon.springboot.security.filter.TokenAuthorizationFilter;
 import com.balloon.springboot.security.handler.TokenAccessDeniedHandler;
 import com.balloon.springboot.security.handler.TokenAuthenticationEntryPointHandler;
 import com.balloon.springboot.security.handler.TokenLogoutSuccessHandler;
-import com.balloon.springboot.security.provider.UserAuthenticationProvider;
-import com.balloon.springboot.security.provider.UserSmsAuthenticationProvider;
 import com.balloon.springboot.security.service.UserDetailsExtService;
 import com.balloon.springboot.security.service.UserSmsDetailsService;
 import com.balloon.springboot.security.service.impl.DefaultUserDetailsServiceImpl;
@@ -36,7 +34,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
