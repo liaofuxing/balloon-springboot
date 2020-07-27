@@ -1,3 +1,16 @@
+/*
+    Copyright (c) [2020] [liaofuxing]
+    [balloon] is licensed under Mulan PSL v2.
+    You can use this software according to the terms and conditions of the Mulan PSL v2.
+    You may obtain a copy of Mulan PSL v2 at:
+    http://license.coscl.org.cn/MulanPSL2
+    THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
+    EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
+    MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
+    See the Mulan PSL v2 for more details.
+ */
+
+
 package com.balloon.springboot.autoconfigure.security;
 
 import com.balloon.springboot.autoconfigure.AutoConfigConstant;
@@ -9,8 +22,6 @@ import com.balloon.springboot.security.filter.TokenAuthorizationFilter;
 import com.balloon.springboot.security.handler.TokenAccessDeniedHandler;
 import com.balloon.springboot.security.handler.TokenAuthenticationEntryPointHandler;
 import com.balloon.springboot.security.handler.TokenLogoutSuccessHandler;
-import com.balloon.springboot.security.provider.UserAuthenticationProvider;
-import com.balloon.springboot.security.provider.UserSmsAuthenticationProvider;
 import com.balloon.springboot.security.service.UserDetailsExtService;
 import com.balloon.springboot.security.service.UserSmsDetailsService;
 import com.balloon.springboot.security.service.impl.DefaultUserDetailsServiceImpl;
@@ -27,16 +38,12 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -47,7 +54,6 @@ import javax.annotation.PostConstruct;
  * 可以在配置文件中设置是否装载生效, 将 balloon.security.enable 属性修改为false 不生效, true 生效
  *
  * @author liaofuxing
- *
  */
 @SuppressWarnings("all")
 @Configuration
@@ -62,7 +68,7 @@ public class SecurityExtAutoConfiguration {
     private UserDetailsExtService userDetailsExtService;
 
     @Autowired
-    private UserSmsDetailsService  userSmsDetailsService;
+    private UserSmsDetailsService userSmsDetailsService;
 
 
     @Autowired
@@ -114,9 +120,6 @@ public class SecurityExtAutoConfiguration {
 
         @Autowired
         private TokenAuthorizationFilter tokenAuthorizationFilter;
-
-
-
 
 
         @Override
