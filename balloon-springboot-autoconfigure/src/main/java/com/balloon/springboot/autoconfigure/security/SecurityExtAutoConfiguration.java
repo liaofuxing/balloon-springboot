@@ -92,14 +92,14 @@ public class SecurityExtAutoConfiguration {
          */
         @PostConstruct
         public void init() {
-            logger.warn("警告: 允许跨域请求已开启, 要想关闭跨域配置, 请设置 balloon.security.cors = false, 关闭配置.");
+            logger.warn("警告: 跨域请求已开启, 要想关闭跨域配置, 请设置 balloon.security.cors = false, 关闭配置.");
         }
     }
 
     @Configuration
     @ConditionalOnClass(WebSecurityConfigurerAdapter.class)
     @EnableWebSecurity
-    class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         /**
          * 用户名密码登录配置器
          */

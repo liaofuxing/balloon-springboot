@@ -4,18 +4,16 @@ import lombok.Data;
 
 import java.util.List;
 
+
 /**
  * 分页数据返回类
+ *
+ * @param <T> 需要返回数据的泛型类型
  * @author liaofuxing
  * @date 2020/03/13 22:01
  */
-
-/**
- *
- * @param <T> 需要返回数据的泛型类型
- */
 @Data
-public class DatePageVO<T>{
+public class DatePageVO<T> {
 
     /**
      * 一共多少条数据(分页)

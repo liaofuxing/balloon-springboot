@@ -4,3 +4,5 @@
  | '/'`\ \`'_\ :  | |  | |/ .'`\ \/ .'`\ \[ `.-. |  
  |  \__/ |// | |, | |  | || \__. || \__. | | | | |  
 [__;.__.' \'-;__/[___][___]'.__.'  '.__.' [___||__]
+
+Spring Boot Version: ${spring-boot.version}${spring-boot.formatted-version}
