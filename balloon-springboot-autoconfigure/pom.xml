@@ -5,9 +5,10 @@
     <parent>
         <groupId>com.balloon</groupId>
         <artifactId>balloon-springboot</artifactId>
-        <version>0.0.1</version>
+        <version>0.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
+
     <artifactId>balloon-springboot-autoconfigure</artifactId>
     <dependencies>
 
@@ -20,24 +21,24 @@
         <dependency>
             <groupId>com.balloon</groupId>
             <artifactId>balloon-springboot-core</artifactId>
-            <version>${project.version}</version>
+            <version>${balloon.springboot.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.balloon</groupId>
             <artifactId>balloon-springboot-redis</artifactId>
-            <version>${project.version}</version>
+            <version>${balloon.springboot.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.balloon</groupId>
             <artifactId>balloon-springboot-security</artifactId>
-            <version>${project.version}</version>
+            <version>${balloon.springboot.version}</version>
         </dependency>
         <dependency>
             <groupId>com.balloon</groupId>
             <artifactId>balloon-springboot-mail</artifactId>
-            <version>${project.version}</version>
+            <version>${balloon.springboot.version}</version>
         </dependency>
 
     </dependencies>

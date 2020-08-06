@@ -12,7 +12,7 @@
 
     <groupId>com.balloon</groupId>
     <artifactId>balloon-springboot</artifactId>
-    <version>0.0.1</version>
+    <version>0.1.0</version>
     <packaging>pom</packaging>
     <name>balloon springboot starter package</name>
     <description>balloon springboot starter package plugin</description>
@@ -20,7 +20,7 @@
         <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>utf-8</project.reporting.outputEncoding>
         <java.version>1.8</java.version>
-        <project.version>0.0.1</project.version>
+        <balloon.springboot.version>0.1.0</balloon.springboot.version>
         <lombok.version>1.18.8</lombok.version>
         <balloon.core.version>1.0.0</balloon.core.version>
     </properties>

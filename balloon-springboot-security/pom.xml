@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.balloon</groupId>
         <artifactId>balloon-springboot</artifactId>
-        <version>0.0.1</version>
+        <version>0.1.0</version>
     </parent>
 
     <artifactId>balloon-springboot-security</artifactId>
@@ -18,8 +18,6 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
-
-
         <dependency>
             <groupId>com.balloon</groupId>
             <artifactId>balloon-core</artifactId>
@@ -29,13 +27,13 @@
         <dependency>
             <groupId>com.balloon</groupId>
             <artifactId>balloon-springboot-core</artifactId>
-            <version>${project.version}</version>
+            <version>${balloon.springboot.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.balloon</groupId>
             <artifactId>balloon-springboot-redis</artifactId>
-            <version>${project.version}</version>
+            <version>${balloon.springboot.version}</version>
         </dependency>
     </dependencies>
 </project>

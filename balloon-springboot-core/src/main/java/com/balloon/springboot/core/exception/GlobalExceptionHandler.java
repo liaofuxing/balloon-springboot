@@ -33,10 +33,12 @@ public class GlobalExceptionHandler {
             BusinessRuntimeException businessRuntimeException = (BusinessRuntimeException) e;
             resultVO.setCode(businessRuntimeException.getCode());
             resultVO.setMsg(businessRuntimeException.getMessage());
+            logger.info("业务异常code:{}, msg:{}",businessRuntimeException.getCode(), businessRuntimeException.getMessage());
         } else {
-            resultVO = ResultVOUtils.error(null);
+            resultVO = ResultVOUtils.error("系统异常");
+            logger.info("系统异常");
         }
-        logger.error("ERROR: " + e.getMessage());
+        e.printStackTrace();
         return resultVO;
     }
 }
