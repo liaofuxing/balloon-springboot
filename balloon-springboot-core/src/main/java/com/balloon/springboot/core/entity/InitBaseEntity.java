@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 /**
  * 将 BaseEntity 的创建时间和修改时间初始化为当前时间
- * <p>需要将一个基础 BaseEntity 的类的创建时间和修改时间初始化为当前时间时, 可以使用改方法</p>
+ * <p>需要将一个继承 BaseEntity 的类的创建时间和修改时间初始化为当前时间时, 可以使用该类</p>
  *
  * @author liaofuxing
  */
