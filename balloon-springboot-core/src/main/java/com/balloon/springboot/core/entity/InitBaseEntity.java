@@ -24,8 +24,10 @@ public class InitBaseEntity {
     }
 
     /**
-     * @param source 需要初始化的目标
-     * @param format 需要吧时间初始化成字符串格式
+     * 将指定对象的 createTime, UpdateTime 按 format 初始化, 当 format 为空时, 将使用默认格式("yyyy-MM-dd HH:mm:ss")初始化
+     *
+     * @param source 需要初始化的目标对象
+     * @param format 需要把时间初始化成字符串格式 eg: format = "yyyy-MM-dd HH:mm:ss"
      * @param <S>    目标类型
      * @return S 已经初始化完成的类
      */
