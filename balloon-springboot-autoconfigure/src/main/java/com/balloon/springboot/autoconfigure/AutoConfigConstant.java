@@ -9,7 +9,10 @@ public class AutoConfigConstant {
 
 
     public static final String REDIS = ROOT + "redis";
+    public static final String ENABLED_CACHE = "cache";
+
     public static final String SMS = ROOT + "sms";
+
     public static final String SECURITY = ROOT + "security";
     public static final String ENABLED_CORS = "cors";
 

@@ -3,7 +3,6 @@ package com.balloon.springboot.autoconfigure.redis;
 
 import com.balloon.springboot.autoconfigure.AutoConfigConstant;
 import com.balloon.springboot.core.jackson.JacksonObjectMapper;
-import com.balloon.springboot.redis.lock.DistributedLockHandler;
 import com.balloon.springboot.redis.utils.RedisUtils;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
@@ -16,15 +15,24 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CachingConfigurerSupport;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.cache.RedisCacheConfiguration;
+import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.cache.RedisCacheWriter;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.integration.redis.util.RedisLockRegistry;
 
 import javax.annotation.PostConstruct;
+import java.time.Duration;
 
 /**
  * redis 工具自动装载
@@ -89,13 +97,45 @@ public class RedisUtilsAutoConfiguration {
         return redisUtils;
     }
 
+//    @Bean
+//    @ConditionalOnBean(StringRedisTemplate.class)
+//    public DistributedLockHandler distributedLockHandler(StringRedisTemplate stringRedisTemplate) {
+//        DistributedLockHandler distributedLockHandler = new DistributedLockHandler();
+//        distributedLockHandler.setTemplate(stringRedisTemplate);
+//        return distributedLockHandler;
+//    }
+
+    // 分布式 redis 锁, spring-integration-redis
     @Bean
-    @ConditionalOnBean(StringRedisTemplate.class)
-    public DistributedLockHandler distributedLockHandler(StringRedisTemplate stringRedisTemplate) {
-        DistributedLockHandler distributedLockHandler = new DistributedLockHandler();
-        distributedLockHandler.setTemplate(stringRedisTemplate);
-        return distributedLockHandler;
+    public RedisLockRegistry redisLockRegistry(RedisConnectionFactory redisConnectionFactory){
+        return new RedisLockRegistry(redisConnectionFactory, "redis-lock");
     }
+
+    // redis 缓存
+    @EnableCaching
+    @ConditionalOnProperty(prefix = AutoConfigConstant.REDIS, name = AutoConfigConstant.ENABLED_CACHE, havingValue = AutoConfigConstant.TRUE)
+    public class RedisCacheConfig extends CachingConfigurerSupport {
+
+        @Bean
+        public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
+            RedisCacheConfiguration redisCacheConfiguration = RedisCacheConfiguration.defaultCacheConfig()
+                    .entryTtl(Duration.ofHours(1)); // 设置缓存有效期一小时
+            return RedisCacheManager
+                    .builder(RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory))
+                    .cacheDefaults(redisCacheConfiguration).build();
+        }
+
+        /**
+         * 自动装载初始化拦截器
+         */
+        @PostConstruct
+        public void init() {
+            logger.info("Reids 缓存已启用");
+        }
+
+    }
+
+
 
     /**
      * 自动装载初始化拦截器

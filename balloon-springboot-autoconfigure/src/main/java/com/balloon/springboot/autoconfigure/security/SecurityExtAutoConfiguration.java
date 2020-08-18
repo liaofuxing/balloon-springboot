@@ -62,7 +62,7 @@ import javax.annotation.PostConstruct;
 @ConditionalOnProperty(prefix = AutoConfigConstant.SECURITY, name = AutoConfigConstant.ENABLED, havingValue = AutoConfigConstant.TRUE)
 public class SecurityExtAutoConfiguration {
 
-    private static final Logger logger = LoggerFactory.getLogger(RedisUtilsAutoConfiguration.class);
+    private static final Logger logger = LoggerFactory.getLogger(SecurityExtAutoProperties.class);
 
     @Autowired
     private UserDetailsExtService userDetailsExtService;
