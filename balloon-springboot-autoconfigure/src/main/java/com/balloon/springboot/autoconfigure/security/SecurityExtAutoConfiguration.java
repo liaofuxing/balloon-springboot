@@ -138,7 +138,7 @@ public class SecurityExtAutoConfiguration {
                     //设置登出成功处理器（下面介绍）
                     .logoutSuccessHandler(tokenLogoutSuccessHandler).and()
                     .authorizeRequests()
-                    .antMatchers("/sms/sendSmsCode").permitAll()
+                    .antMatchers("/sms/sendSmsCode","/user/register").permitAll()
                     .anyRequest()
                     .authenticated()
                     .and()
