@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.balloon</groupId>
+        <artifactId>balloon-springboot</artifactId>
+        <version>0.1.0</version>
+    </parent>
+
+    <artifactId>balloon-springboot-quartz</artifactId>
+    <version>1.0.0</version>
+
+    <dependencies>
+
+        <!--quartz定时调度依赖-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-quartz</artifactId>
+        </dependency>
+
+
+       <dependency>
+            <groupId>com.balloon</groupId>
+            <artifactId>balloon-core</artifactId>
+            <version>${balloon.core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.balloon</groupId>
+            <artifactId>balloon-springboot-core</artifactId>
+            <version>${balloon.springboot.version}</version>
+        </dependency>
+
+    </dependencies>
+</project>
