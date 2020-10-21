@@ -13,8 +13,8 @@
 
 package com.balloon.springboot.autoconfigure.security;
 
+import com.balloon.core.utils.StringUtils;
 import com.balloon.springboot.autoconfigure.AutoConfigConstant;
-import com.balloon.springboot.autoconfigure.redis.RedisUtilsAutoConfiguration;
 import com.balloon.springboot.redis.utils.RedisUtils;
 import com.balloon.springboot.security.config.UsernameAuthenticationConfigurer;
 import com.balloon.springboot.security.config.SmsCodeAuthenticationConfigurer;
@@ -129,6 +129,9 @@ public class SecurityExtAutoConfiguration {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             String filterUrl = securityExtAutoProperties.getFilterUrl();
+            if(StringUtils.isEmpty(filterUrl)){
+                filterUrl = "/user/register";
+            }
             //处理跨域请求
             http
                     .cors().and().csrf().disable()
