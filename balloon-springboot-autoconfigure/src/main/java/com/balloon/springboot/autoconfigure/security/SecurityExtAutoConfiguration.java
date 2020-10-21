@@ -70,6 +70,9 @@ public class SecurityExtAutoConfiguration {
     @Autowired
     private UserSmsDetailsService userSmsDetailsService;
 
+    @Autowired
+    private SecurityExtAutoProperties securityExtAutoProperties;
+
 
     @Autowired
     private RedisUtils redisUtils;
@@ -122,8 +125,10 @@ public class SecurityExtAutoConfiguration {
         private TokenAuthorizationFilter tokenAuthorizationFilter;
 
 
+
         @Override
         protected void configure(HttpSecurity http) throws Exception {
+            String filterUrl = securityExtAutoProperties.getFilterUrl();
             //处理跨域请求
             http
                     .cors().and().csrf().disable()
@@ -138,7 +143,7 @@ public class SecurityExtAutoConfiguration {
                     //设置登出成功处理器（下面介绍）
                     .logoutSuccessHandler(tokenLogoutSuccessHandler).and()
                     .authorizeRequests()
-                    .antMatchers("/sms/sendSmsCode","/user/register").permitAll()
+                    .antMatchers(filterUrl.split(",")).permitAll()
                     .anyRequest()
                     .authenticated()
                     .and()

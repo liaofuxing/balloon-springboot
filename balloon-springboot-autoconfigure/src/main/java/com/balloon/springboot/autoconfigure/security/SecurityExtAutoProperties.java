@@ -17,4 +17,9 @@ public class SecurityExtAutoProperties {
      * 是否允许跨域
      */
     private boolean cors;
+
+    /**
+     * Security 默认过滤url
+     */
+    private String filterUrl;
 }
